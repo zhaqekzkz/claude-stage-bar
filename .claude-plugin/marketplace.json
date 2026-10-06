@@ -1,0 +1,16 @@
+{
+  "name": "stage-bar",
+  "owner": {
+    "name": "zhaqekzkz"
+  },
+  "metadata": {
+    "description": "Stage bar for Claude Code — where a development task is and what is waiting on you."
+  },
+  "plugins": [
+    {
+      "name": "stage-bar",
+      "source": "./",
+      "description": "Stage bar: where a development task is and what is waiting on you."
+    }
+  ]
+}

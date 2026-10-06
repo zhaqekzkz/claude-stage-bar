@@ -1,0 +1,28 @@
+<h2 class="sr-only">{{SUMMARY}}</h2>
+<style>
+.st{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:8px}
+.s{border:0.5px solid var(--border);border-radius:var(--radius);padding:8px 10px;font-size:13px;line-height:1.35}
+.s .n{font-size:11px;color:var(--text-muted)}
+.s.done{background:var(--bg-success);border-color:var(--border-success);color:var(--text-success)}
+.s.now{background:var(--bg-warning);border-color:var(--border-warning);color:var(--text-warning)}
+.s.todo{color:var(--text-secondary)}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;font-size:13px}
+.pill{border:0.5px solid var(--border);border-radius:999px;padding:4px 10px;color:var(--text-secondary)}
+.pill.on{background:var(--bg-warning);border-color:var(--border-warning);color:var(--text-warning)}
+</style>
+<div style="padding:0.5rem 0">
+<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;font-size:14px">
+<span style="font-weight:500;color:var(--text-primary)">{{TITLE}}</span>
+<span style="color:var(--text-secondary)">{{COUNTER}}</span>
+</div>
+<div style="height:6px;border-radius:999px;background:var(--surface-1);border:0.5px solid var(--border);overflow:hidden;margin-bottom:12px"><div style="width:{{PERCENT}}%;height:100%;background:var(--text-success)"></div></div>
+<div class="st">
+<div class="s done"><div class="n">1 · {{DONE_LABEL}}</div><i class="ti ti-check" aria-hidden="true"></i> {{STAGE}}</div>
+<div class="s now"><div class="n">8 · {{NOW_OR_WAITING_LABEL}}</div><i class="ti ti-clock" aria-hidden="true"></i> {{STAGE}}</div>
+<div class="s todo"><div class="n">9</div>{{STAGE}}</div>
+</div>
+<div class="row"><span style="color:var(--text-muted)">{{SUBPROJECTS_LABEL}}</span>
+<span class="pill on">{{CURRENT_SUBPROJECT}}</span>
+<span class="pill">{{NEXT_SUBPROJECT}}</span>
+</div>
+</div>

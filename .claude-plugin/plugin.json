@@ -1,0 +1,10 @@
+{
+  "name": "stage-bar",
+  "version": "0.1.0",
+  "description": "Stage bar for Claude Code: shows where a development task is (taken → plan → code → review → PR → merge → deploy) and what is waiting on you.",
+  "author": {
+    "name": "zhaqekzkz"
+  },
+  "license": "MIT",
+  "keywords": ["status", "progress", "workflow", "widget", "pull-request"]
+}
