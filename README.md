@@ -1,111 +1,82 @@
-# stage-bar — плашка этапов для Claude Code
+# stage-bar — see where your Claude Code task is, at a glance
 
-[English below](#english)
+[Русская версия](README.ru.md)
 
-Длинные задачи с агентом теряются в тексте: что уже сделано, что сейчас и — главное —
-**ждёт ли что-то от тебя**. `stage-bar` — навык (skill) для Claude Code: в каждом ответе
-по задаче Claude показывает карточку этапов:
+Long agentic tasks get lost in walls of text: what is done, what is happening now, and —
+most importantly — **is anything waiting on you?** `stage-bar` is a Claude Code skill that
+puts a stage card at the top of every progress reply on a development task.
+
+![Stage bar in light mode: 8 of 11 stages done, «CI and merge» waiting on you](docs/stage-bar-light.png)
+
+![Stage bar in dark mode: a short task, the last stage waiting on you](docs/stage-bar-dark.png)
+
+- **Green** — done and verified (tests passed, review approved, PR actually opened).
+- **Amber** — the current stage. When the next move is yours (approve the design, merge
+  the PR, run the deploy), it says **«your move»**.
+- **Grey** — still ahead.
+- Big initiatives get a row of sub-project pills under the stages.
+
+In the Claude desktop app (Code tab) it is an inline card. In the terminal, where there is
+no widget tool, Claude prints the same thing as one line:
 
 ```
-Заказ с недостачей · 8/11 · PR #513
-✓ Задача взята → ✓ Анализ → ✓ Дизайн → ✓ Спека+план → ✓ Код 11/11 → ✓ Ревью → ✓ Вики → ✓ PR
-→ ● CI и мёрж (ждёт вас) → ○ Выкат → ○ Замер
+Checkout refactor · 8/11 · PR #513
+✓ Taken → ✓ Analysis → ✓ Design → ✓ Spec+plan → ✓ Code 11/11 → ✓ Review → ✓ Docs → ✓ PR
+→ ● CI and merge (your move) → ○ Deploy → ○ Measure
 ```
 
-- В десктоп-приложении (вкладка Code, есть виджеты) — цветная карточка прямо в чате:
-  зелёные этапы готовы, жёлтый — текущий, серые — впереди.
-- В терминале — такая же полоска текстом.
-- Этап, где нужен твой шаг (одобрить дизайн, слить PR, запустить выкат), подписан
-  «ждёт вас».
-- Если задача разбита на подпроекты — под этапами строка подпроектов.
+## Install
 
-## Установка
+### As a plugin (recommended)
 
-### Вариант 1 — плагином (рекомендуется)
-
-В Claude Code:
+In Claude Code:
 
 ```
 /plugin marketplace add zhaqekzkz/claude-stage-bar
 /plugin install stage-bar@stage-bar
 ```
 
-Навык подключится во всех проектах. Обновление — `/plugin marketplace update stage-bar`.
+The skill is available in every project. Update with `/plugin marketplace update stage-bar`.
 
-### Вариант 2 — вручную, одной папкой
+### Manually, as a folder
 
-Скопируй `skills/stage-bar` в папку навыков пользователя:
+Copy `skills/stage-bar` into your user skills folder:
 
 - macOS / Linux / WSL: `~/.claude/skills/stage-bar/`
-- Windows: `C:\Users\<имя>\.claude\skills\stage-bar\`
+- Windows: `C:\Users\<you>\.claude\skills\stage-bar\`
 
 ```bash
 git clone https://github.com/zhaqekzkz/claude-stage-bar.git
 cp -r claude-stage-bar/skills/stage-bar ~/.claude/skills/
 ```
 
-### Вариант 3 — только в одном проекте
+### For one project (shared with your team)
 
-Положи папку в `<проект>/.claude/skills/stage-bar/` и закоммить — плашка появится у всех,
-кто работает с этим репозиторием через Claude Code.
+Put the folder in `<project>/.claude/skills/stage-bar/` and commit it — everyone who opens
+the repo in Claude Code gets the bar.
 
-## Чтобы плашка была всегда
+## Make it stick
 
-Навык включается сам, когда Claude видит, что задача многоэтапная. Если хочешь, чтобы
-он не забывал, добавь строку в `~/.claude/CLAUDE.md` (глобально) или в `CLAUDE.md`
-проекта:
+Claude picks the skill up on its own when a task has several stages. To make sure it never
+forgets, add one line to `~/.claude/CLAUDE.md` (all projects) or the project's `CLAUDE.md`:
 
 ```markdown
-- В ответах по задачам разработки показывай плашку этапов (навык stage-bar).
+- Show the stage bar (stage-bar skill) in progress replies on development tasks.
 ```
 
-## Настройка этапов
+## Customize the stages
 
-Список этапов — в `skills/stage-bar/SKILL.md`, раздел «Stages». Переименуй, убери или
-добавь свои (например, «Согласование с юристом» или «Публикация в стор»). Claude и так
-подстраивает список под задачу, но базовый порядок берёт оттуда.
+The default pipeline lives in `skills/stage-bar/SKILL.md`, section «Stages»: taken →
+analysis → design approved → spec and plan → code N/M → review and tests → docs → PR →
+CI and merge → deploy → measure. Rename, drop or add your own (e.g. «Legal review»,
+«App Store release») — Claude adapts the list to each task but keeps this order.
 
-## Ограничения
+## Notes
 
-- Кнопки в виджете не делаются: в Claude Code они не работают. Варианты следующего шага
-  Claude пишет текстом под плашкой.
-- Карточка-виджет нужен инструмент `show_widget` (есть в десктоп-приложении). Без него
-  Claude идёт по запасным путям, не скатываясь в серый моноширинный текст:
-  1. **Картинка.** Если сессия умеет отправлять файлы (`SendUserFile`), Claude заполняет
-     `assets/stage-bar-standalone.html`, снимает скриншот и присылает PNG.
-  2. **Цветная текстовая карточка** в markdown — работает в любом чате:
-
-     **Заказ с недостачей** · 8 из 11 · PR #513
-     `▰▰▰▰▰▰▰▰▱▱▱` 73 %
-     🟩 1 Задача взята · 🟩 2 Анализ · … · 🟧 **9 CI и мёрж — ждёт вас** · ⬜ 10 Выкат · ⬜ 11 Замер
-
----
-
-## English
-
-`stage-bar` is a Claude Code skill that puts a stage card at the top of every progress
-reply on a development task: done / current / remaining stages and whether the next move
-is yours (approve the design, merge the PR, run the deploy).
-
-- With a widget tool (`show_widget`, Claude desktop Code tab) — a colored inline card.
-- Without it — a PNG of the same card (if the session can send files, rendered from
-  `assets/stage-bar-standalone.html`), otherwise a coloured markdown card:
-  `🟩 done · 🟧 current (your move) · ⬜ todo` with a `▰▰▱▱` progress bar.
-
-### Install
-
-```
-/plugin marketplace add zhaqekzkz/claude-stage-bar
-/plugin install stage-bar@stage-bar
-```
-
-Or copy `skills/stage-bar` to `~/.claude/skills/` (all projects) or
-`<project>/.claude/skills/` (one project, shared via git).
-
-To make it sticky, add to `~/.claude/CLAUDE.md`:
-`- Show the stage bar (stage-bar skill) in progress replies on development tasks.`
-
-Customize the default stages in `skills/stage-bar/SKILL.md`. Buttons are intentionally
-not rendered — they don't work inside Claude Code.
+- No buttons on purpose: buttons inside widgets don't work in Claude Code. Claude writes the
+  next-step options as plain text under the bar.
+- The card needs a widget tool (`show_widget`, available in the desktop app). Without it you
+  get the text line.
+- Labels follow the language you talk to Claude in.
 
 License: MIT
