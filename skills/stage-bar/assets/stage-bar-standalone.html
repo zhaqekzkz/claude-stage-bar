@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="{{LANG}}">
+<head>
+<meta charset="utf-8">
+<title>{{TITLE}} — stage bar</title>
+<style>
+:root{
+  --bg:#141210;--surface-1:#211e1b;--border:#3a3530;
+  --text-primary:#f2efe9;--text-secondary:#b5ada3;--text-muted:#857d73;
+  --bg-success:#102a17;--border-success:#2f7a43;--text-success:#5fd37f;
+  --bg-warning:#3a1712;--border-warning:#c2493a;--text-warning:#ff8a6e;
+  --radius:8px;
+}
+@media (prefers-color-scheme: light){:root{
+  --bg:#faf9f7;--surface-1:#efece8;--border:#d9d4cd;
+  --text-primary:#1f1c19;--text-secondary:#5c554d;--text-muted:#8a8279;
+  --bg-success:#e6f5ea;--border-success:#7cc490;--text-success:#1d7a3a;
+  --bg-warning:#fdebe6;--border-warning:#e3907f;--text-warning:#b23a22;
+}}
+body{margin:0;padding:20px;background:var(--bg);font:14px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif}
+.card{max-width:760px;border:0.5px solid var(--border);border-radius:12px;padding:14px 16px;background:var(--bg)}
+.st{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:8px}
+.s{border:0.5px solid var(--border);border-radius:var(--radius);padding:8px 10px;font-size:13px;line-height:1.35}
+.s .n{font-size:11px;color:var(--text-muted)}
+.s.done{background:var(--bg-success);border-color:var(--border-success);color:var(--text-success)}
+.s.done .n{color:var(--text-success);opacity:.8}
+.s.now{background:var(--bg-warning);border-color:var(--border-warning);color:var(--text-warning)}
+.s.now .n{color:var(--text-warning);opacity:.85}
+.s.todo{color:var(--text-secondary)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:12px;font-size:13px}
+.pill{border:0.5px solid var(--border);border-radius:999px;padding:4px 10px;color:var(--text-secondary)}
+.pill.on{background:var(--bg-warning);border-color:var(--border-warning);color:var(--text-warning)}
+</style>
+</head>
+<body>
+<div class="card">
+  <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;font-size:14px">
+    <span style="font-weight:600;color:var(--text-primary)">{{TITLE}}</span>
+    <span style="color:var(--text-secondary)">{{COUNTER}}</span>
+  </div>
+  <div style="height:6px;border-radius:999px;background:var(--surface-1);border:0.5px solid var(--border);overflow:hidden;margin-bottom:12px"><div style="width:{{PERCENT}}%;height:100%;background:var(--text-success)"></div></div>
+  <div class="st">
+    <!-- one block per stage: done / now / todo -->
+    <div class="s done"><div class="n">1 · {{DONE_LABEL}}</div>✓ {{STAGE}}</div>
+    <div class="s now"><div class="n">8 · {{NOW_OR_WAITING_LABEL}}</div>◷ {{STAGE}}</div>
+    <div class="s todo"><div class="n">9</div>{{STAGE}}</div>
+  </div>
+  <!-- optional: sub-projects row; drop it for a single-project task -->
+  <div class="row"><span style="color:var(--text-muted)">{{SUBPROJECTS_LABEL}}</span>
+    <span class="pill on">{{CURRENT_SUBPROJECT}}</span>
+    <span class="pill">{{NEXT_SUBPROJECT}}</span>
+  </div>
+</div>
+</body>
+</html>

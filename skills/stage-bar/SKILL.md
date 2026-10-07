@@ -74,18 +74,34 @@ Do not add buttons that call `sendPrompt`: in Claude Code (CLI and the desktop C
 they do nothing, and a dead button is worse than no button. Write the next-step options
 as plain text under the widget ("Reply «PR» to open the pull request…").
 
-### If there is no widget tool (terminal, plain chat)
+### If there is no widget tool — make it a picture or a coloured text card
 
-Print a text bar at the top of the reply:
+Sessions differ: the desktop Code tab has the visualize widget, a CLI or a remote/SDK
+session usually doesn't. Check with ToolSearch (`visualize show_widget`) before falling
+back — don't assume.
+
+**Picture.** If `SendUserFile` works in this session: fill
+`assets/stage-bar-standalone.html` (same look, own dark/light variables), screenshot the
+`.card` with Playwright (`colorScheme: 'dark'`, `deviceScaleFactor: 2`) and send the PNG
+with `display: 'render'`. If delivery fails (e.g. "not on a project thread"), don't retry —
+use the coloured text card below.
+
+**Coloured text card** (markdown, renders in any chat). Same information as the widget:
 
 ```
-Checkout refactor · 8/11 · PR #513
-✓ Taken → ✓ Analysis → ✓ Design → ✓ Spec+plan → ✓ Code 11/11 → ✓ Review → ✓ Docs → ✓ PR
-→ ● CI and merge (your move) → ○ Deploy → ○ Measure
+**Заказ с недостачей** · 8 из 11 · PR #513
+`▰▰▰▰▰▰▰▰▱▱▱` 73 %
+
+🟩 1 Задача взята · 🟩 2 Анализ · 🟩 3 Дизайн · 🟩 4 Спека и план · 🟩 5 Код 11/11
+🟩 6 Ревью и тесты · 🟩 7 Вики · 🟩 8 PR открыт · 🟧 **9 CI и мёрж — ждёт вас**
+⬜ 10 Выкат и проверка · ⬜ 11 Замер
+
+Вся задача: 🟧 **1. Недостача — PR** · ⬜ 2. Ссылка на корзину · ⬜ 3. Помощь провизора
 ```
 
-`✓` done, `●` current, `○` todo. Put "(your move)" / "(ждёт вас)" on the current stage
-when it is waiting on the user.
+🟩 done, 🟧 current (bold, say "ждёт вас" / "your move" when it is the user's), ⬜ todo.
+Progress bar: one `▰` per done stage, `▱` for the rest. Never use a fenced code block for
+the card itself — that turns it monochrome.
 
 ## Example
 

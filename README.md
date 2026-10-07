@@ -69,8 +69,15 @@ cp -r claude-stage-bar/skills/stage-bar ~/.claude/skills/
 
 - Кнопки в виджете не делаются: в Claude Code они не работают. Варианты следующего шага
   Claude пишет текстом под плашкой.
-- Виджет нужен инструмент `show_widget` (есть в десктоп-приложении). Без него — текстовая
-  полоска.
+- Карточка-виджет нужен инструмент `show_widget` (есть в десктоп-приложении). Без него
+  Claude идёт по запасным путям, не скатываясь в серый моноширинный текст:
+  1. **Картинка.** Если сессия умеет отправлять файлы (`SendUserFile`), Claude заполняет
+     `assets/stage-bar-standalone.html`, снимает скриншот и присылает PNG.
+  2. **Цветная текстовая карточка** в markdown — работает в любом чате:
+
+     **Заказ с недостачей** · 8 из 11 · PR #513
+     `▰▰▰▰▰▰▰▰▱▱▱` 73 %
+     🟩 1 Задача взята · 🟩 2 Анализ · … · 🟧 **9 CI и мёрж — ждёт вас** · ⬜ 10 Выкат · ⬜ 11 Замер
 
 ---
 
@@ -81,7 +88,9 @@ reply on a development task: done / current / remaining stages and whether the n
 is yours (approve the design, merge the PR, run the deploy).
 
 - With a widget tool (`show_widget`, Claude desktop Code tab) — a colored inline card.
-- Without it (terminal) — a one-line text bar: `✓ done → ● current (your move) → ○ todo`.
+- Without it — a PNG of the same card (if the session can send files, rendered from
+  `assets/stage-bar-standalone.html`), otherwise a coloured markdown card:
+  `🟩 done · 🟧 current (your move) · ⬜ todo` with a `▰▰▱▱` progress bar.
 
 ### Install
 
